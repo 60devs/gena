@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "description": "Gena - a static web site generator",
   "main": false,
-  "repository": "git+https://bitbucket.org/60devs/gena.git",
+  "repository": "git+https://github.com/60devs/gena.git",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
