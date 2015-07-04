@@ -1,6 +1,6 @@
 {
   "name": "gena",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Gena - a static web site generator",
   "main": false,
   "repository": "git+https://bitbucket.org/60devs/gena.git",
