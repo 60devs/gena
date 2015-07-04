@@ -38,7 +38,6 @@
     "gulp-sort": "^1.0.1",
     "gulp-static-handlebars": "^1.1.0",
     "gulp-tap": "^0.1.3",
-    "gulp-uncss": "^1.0.1",
     "gulp-util": "^3.0.5",
     "gulp-vcl-preprocessor": "git://github.com/vcl/gulp-vcl-preprocessor.git",
     "gulp-watch": "^4.2.4",
