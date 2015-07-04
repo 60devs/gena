@@ -3,8 +3,7 @@
 ## Installation
 
 ```sh
-git clone https://orkon@bitbucket.org/60devs/generator.git
-cd generator
-npm link
+npm install gena
 ```
-See https://bitbucket.org/60devs/website for the next steps
+
+See https://gena.60devs.com for the next steps
