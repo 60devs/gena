@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "gena": "./bin/gena.sh"
+    "gena": "./bin/gena.js"
   },
   "author": "Oleksii Rudenko",
   "license": "MIT",
@@ -47,10 +47,11 @@
     "js-yaml": "^3.2.7",
     "jspm": "^0.15.1",
     "lodash": "^3.5.0",
+    "merge-stream": "^0.1.7",
+    "nodegit": "^0.4.1",
     "request": "^2.58.0",
     "require-dir": "^0.1.0",
     "rimraf": "^2.3.2",
-    "run-sequence": "^1.0.2",
-    "merge-stream": "^0.1.7"
+    "run-sequence": "^1.0.2"
   }
 }
