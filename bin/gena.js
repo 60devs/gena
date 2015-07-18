@@ -19,10 +19,8 @@ if (args[0] === 'init') {
         'npm install && jspm install'
         ].join(' ')
       );
-
-      child.stdout.on('data', function(data) {
-        console.log(data.toString());
-      });
+      child.stdout.pipe(process.stdout);
+      child.stderr.pipe(process.stderr);
     }, function(err) {
       console.log(err);
     }
@@ -35,9 +33,6 @@ if (args[0] === 'init') {
     args.join(' ')
     ].join(' ')
   );
-
-  child.stdout.on('data', function(data) {
-    console.log(data.toString());
-  });
-
+  child.stdout.pipe(process.stdout);
+  child.stderr.pipe(process.stderr);
 }
