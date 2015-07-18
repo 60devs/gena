@@ -88,7 +88,7 @@ gulp.task('index-content', function() {
     .pipe(foreach(function(stream, file) {
       var name = file.path.replace(file.base, '');
       name = pureName(name);
-      var page = { name: name, title: site.titleCaps(name), url: '/' + name + '.html' };
+      var page = { name: name, title: site.titleCaps(name), url: name + '.html' };
       if (!site.pagesMap[name] && name !== 'index') {
         site.pages.push(page);
         site.pagesMap[name] = page;
