@@ -9,7 +9,7 @@ gulp.task('deploy', function() {
       return gulp.src('./dist/**/*')
         .pipe(ghPages({
           remoteUrl: site.deploy.url,
-          branch: 'master'
+          branch: site.deploy.branch || 'master'
         }));
     case 'rsync':
       return gulp.src(['dist/**/*'])
