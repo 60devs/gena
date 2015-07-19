@@ -1,6 +1,6 @@
 {
   "name": "gena",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Gena - a static web site generator",
   "main": false,
   "repository": "git+https://github.com/60devs/gena.git",
@@ -48,7 +48,6 @@
     "jspm": "^0.15.1",
     "lodash": "^3.5.0",
     "merge-stream": "^0.1.7",
-    "nodegit": "^0.4.1",
     "request": "^2.58.0",
     "require-dir": "^0.1.0",
     "rimraf": "^2.3.2",
