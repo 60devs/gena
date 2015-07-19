@@ -38,10 +38,20 @@ if (args[0] === 'init') {
       console.log(err);
     });
 } else {
+  var fs = require('fs-extra');
+
+  if (fs.existsSync('./tasks')) {
+    console.log('Loading user tasks: ' + '/tasks');
+    fs.copySync('./tasks', './node_modules/gena/user_tasks/');
+  } else {
+    fs.deleteSync('./node_modules/gena/user_tasks/');
+  }
+
   run([
     'gulp',
     '--cwd .',
     '--gulpfile node_modules/gena/gulpfile.js',
     args.join(' ')
-    ].join(' '));
+    ].join(' ')).catch(function(err) {
+    });
 }

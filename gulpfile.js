@@ -101,11 +101,16 @@ try {
   var doc = yaml.safeLoad(fs.readFileSync(process.cwd() + '/config.yml', 'utf-8'));
   _.merge(site, doc);
   if (!site.pages_order) {
-    site.pages_order = []
+    site.pages_order = [];
   }
 } catch (e) {
   console.log(e);
 }
 
-var dir = requireDir('./tasks');
-
+requireDir('./tasks');
+try {
+  requireDir('./user_tasks');
+  console.log('Using user tasks');
+} catch (err) {
+  console.log('Error loading user tasks ' + err);
+}
