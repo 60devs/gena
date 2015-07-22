@@ -25,7 +25,7 @@ site.pureName = pureName;
 function buildPostMetaData(name, fm) {
   fm.url = fm.url + '.html';
   fm.title = titleCaps(fm.title);
-  fm.full_url = site.url + fm.url;
+  fm.full_url = site.url + '/' + fm.url;
   return fm;
 }
 
