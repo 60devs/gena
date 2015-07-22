@@ -42,8 +42,8 @@ gulp.task('rss', function() {
     '        <item>',
     '          <title>' + fm.title + '</title>',
     '          <pubDate>' + new Date(fm.date).toUTCString() + '</pubDate>',
-    '          <link>' + site.url + fm.url + '</link>',
-    '          <guid isPermaLink="true">' + site.url +  fm.url + '</guid>'
+    '          <link>' + site.url + '/' + fm.url + '</link>',
+    '          <guid isPermaLink="true">' + site.url + '/' + fm.url + '</guid>'
           ];
           if (fm.categories) {
             fm.categories.split(' ').forEach(function(c) {
