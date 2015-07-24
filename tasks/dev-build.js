@@ -4,6 +4,6 @@ var console = require('gulp-util');
 var site = global.site;
 
 gulp.task('dev-build', ['clean'],  function(callback) {
-  var build = site.build;
+  var build = site['dev-build'];
   runSequence.apply(null, build.concat([callback]));
 });
