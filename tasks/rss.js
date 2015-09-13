@@ -1,9 +1,10 @@
+var concat = require('gulp-concat');
 var foreach = require('gulp-foreach');
 var frontMatter = require('gulp-front-matter');
-var concat = require('gulp-concat');
-var tap = require('gulp-tap');
-var sort = require('gulp-sort');
+var gulpIgnore = require('gulp-ignore');
 var plumber = require('gulp-plumber');
+var sort = require('gulp-sort');
+var tap = require('gulp-tap');
 
 var gulp = require('gulp');
 var site = global.site;
@@ -19,18 +20,32 @@ gulp.task('rss', function() {
     '    <atom:link href="' + site.url + '/feed.xml" rel="self" type="application/rss+xml"/>',
     '    <pubDate>' + (new Date().toUTCString()) + '</pubDate>',
     '    <lastBuildDate>' + (new Date().toUTCString()) + '</lastBuildDate>',
-    '    <generator>Any</generator>'];
+    '    <generator>Any</generator>',];
 
   var feedEnd = [
     '</channel>',
-    '</rss>'
+    '</rss>',
   ];
+
+  function isPublished(file) {
+    if (file.fm.publish === false) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   return gulp.src('./src/posts/*.md')
     .pipe(plumber())
+    .pipe(frontMatter({
+      property: 'fm',
+      remove: false,
+    }))
+    .pipe(gulpIgnore.exclude(isPublished))
+
   // Read input files
     .pipe(sort({
-      asc: false
+      asc: false,
     }))
     .pipe(foreach(
         function(stream, file) {
@@ -43,7 +58,7 @@ gulp.task('rss', function() {
     '          <title>' + fm.title + '</title>',
     '          <pubDate>' + new Date(fm.date).toUTCString() + '</pubDate>',
     '          <link>' + site.url + '/' + fm.url + '</link>',
-    '          <guid isPermaLink="true">' + site.url + '/' + fm.url + '</guid>'
+    '          <guid isPermaLink="true">' + site.url + '/' + fm.url + '</guid>',
           ];
           if (fm.categories) {
             fm.categories.split(' ').forEach(function(c) {
