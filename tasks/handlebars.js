@@ -93,11 +93,14 @@ gulp.task('index-content', function() {
       var name = file.path.replace(file.base, '');
       name = pureName(name);
       var page = { name: name, title: site.titleCaps(name), url: name + '.html' };
-      if (!site.pagesMap[name] && name !== 'index') {
-        site.pages.push(page);
-        site.pagesMap[name] = page;
+
+      page.mainNav = site.pages_order.indexOf(name) !== -1;
+      if (name == 'index') {
+        page.title = '';
       }
 
+      site.pages.push(page);
+      site.pagesMap[name] = page;
       return stream;
     }));
 
@@ -161,6 +164,9 @@ gulp.task('pages', function() {
          var name = file.path.replace(file.base, '');
          name = pureName(name);
          var context = site.pagesMap[name];
+         if (!context) {
+           return gulp.src([]);
+         }
          return stream
                .pipe(HandlebarsStatic({
                  page: context,
