@@ -96,7 +96,7 @@ gulp.task('index-content', function() {
         name: name,
         title: site.titleCaps(name),
         url: name + '.html',
-        full_url: site.url + '/' + name.url,
+        full_url: site.url + '/' + (name.url ? name.url : ''),
       };
 
       page.mainNav = site.pages_order.indexOf(name) !== -1;
