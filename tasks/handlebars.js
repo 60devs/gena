@@ -92,7 +92,12 @@ gulp.task('index-content', function() {
     .pipe(foreach(function(stream, file) {
       var name = file.path.replace(file.base, '');
       name = pureName(name);
-      var page = { name: name, title: site.titleCaps(name), url: name + '.html' };
+      var page = {
+        name: name,
+        title: site.titleCaps(name),
+        url: name + '.html',
+        full_url: site.url + '/' + name.url,
+      };
 
       page.mainNav = site.pages_order.indexOf(name) !== -1;
       if (name == 'index') {
