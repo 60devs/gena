@@ -1,5 +1,5 @@
 {
-    "preset": "airbnb",
+    "preset": "google",
     "requireMultipleVarDecl": null,
     "safeContextKeyword": null,
     "requireCamelCaseOrUpperCaseIdentifiers": null

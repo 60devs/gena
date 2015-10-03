@@ -2,25 +2,8 @@
 
 'use strict';
 
-var exec = require('child_process').exec;
-var spawn = require('child_process').spawn;
 var args = process.argv.slice(2);
-var Promise = require('bluebird');
-
-function run(cmd) {
-  return new Promise(function(resolve, reject) {
-    var cmdArr = cmd.split(' ');
-    spawn(cmdArr[0], cmdArr.slice(1),
-      { stdio: 'inherit' })
-      .on('exit', function(error) {
-        if (!error) {
-          resolve();
-        } else {
-          reject(error);
-        }
-      });
-  });
-}
+var run = require('../lib/run');
 
 if (args[0] === 'init') {
   console.log('Initializing...');
