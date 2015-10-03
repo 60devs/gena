@@ -35,8 +35,8 @@ gulp.task('deploy', function() {
     return run('git remote show origin', true).then(function(output) {
       var re = new RegExp(name + ' \\(up to date\\)', 'gi');
       if (re.test(output)) {
-        console.log('Current branch is not up-to-date');
-        return;
+        console.log('Current branch is up-to-date');
+        return true;
       } else {
         throw new Error('Current branch is not up-to-date');
       }
