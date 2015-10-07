@@ -24,3 +24,11 @@ To build the same website locally:
 ```
 
 Also `git` must be installed.
+
+### Usage
+
+```sh
+gena new post my-post-name
+```
+
+generates a new empty post
