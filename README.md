@@ -31,4 +31,4 @@ Also `git` must be installed.
 gena new post my-post-name
 ```
 
-generates a new empty post
+generates a new empty post.
