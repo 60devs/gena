@@ -45,6 +45,7 @@
     "handlebars": "^3.0.0",
     "handlebars-intl": "^1.1.1",
     "handlebars-layouts": "^1.1.0",
+    "html-entities": "^1.2.0",
     "intl": "^0.1.4",
     "js-yaml": "^3.2.7",
     "jspm": "^0.15.1",

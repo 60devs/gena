@@ -6,21 +6,29 @@ var plumber = require('gulp-plumber');
 var sort = require('gulp-sort');
 var tap = require('gulp-tap');
 
+var Entities = require('html-entities').XmlEntities;
+var entities = new Entities();
+
 var gulp = require('gulp');
 var site = global.site;
+
+function analytics(urlPart, fm) {
+  return urlPart + '?utm_source=feed&utm_content=rssClick&utm_medium=rss&utm_campaign=' +
+    encodeURIComponent(site.title);
+}
 
 gulp.task('rss', function() {
   var feed = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
     '  <channel>',
-    '    <title>' + site.title + '</title>',
+    '    <title>' + entities.encode(site.title) + '</title>',
     '    <description></description>',
-    '    <link>' + site.url + '</link>',
+    '    <link>' + entities.encode(site.url) + '</link>',
     '    <atom:link href="' + site.url + '/feed.xml" rel="self" type="application/rss+xml"/>',
     '    <pubDate>' + (new Date().toUTCString()) + '</pubDate>',
     '    <lastBuildDate>' + (new Date().toUTCString()) + '</lastBuildDate>',
-    '    <generator>Any</generator>',];
+    '    <generator>60devs</generator>',];
 
   var feedEnd = [
     '</channel>',
@@ -55,10 +63,10 @@ gulp.task('rss', function() {
           var fm = file.fm;
           var item = [
     '        <item>',
-    '          <title>' + fm.title + '</title>',
+    '          <title>' + entities.encode(fm.title) + '</title>',
     '          <pubDate>' + new Date(fm.date).toUTCString() + '</pubDate>',
-    '          <link>' + site.url + '/' + fm.url + '</link>',
-    '          <guid isPermaLink="true">' + site.url + '/' + fm.url + '</guid>',
+    '          <link>' + entities.encode(site.url + '/' + analytics(fm.url, fm)) + '</link>',
+    '          <guid isPermaLink="true">' + entities.encode(site.url + '/' + analytics(fm.url, fm)) + '</guid>',
           ];
           if (fm.categories) {
             fm.categories.split(' ').forEach(function(c) {
