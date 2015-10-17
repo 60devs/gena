@@ -3,16 +3,23 @@ var connect = require('gulp-connect');
 var open = require('gulp-open');
 var watch = require('gulp-watch');
 var batch = require('gulp-batch');
+var connectSSI = require('connect-ssi');
 
 var site = global.site;
 
 function server() {
   site.local = true;
-
+  var dest = './dist/';
   connect.server({
-    root: './dist/',
+    root: dest,
     livereload: true,
-    port: 3000
+    port: 3000,
+    middleware: function() {
+      return [connectSSI({
+        ext: '.html',
+        baseDir: dest
+      })];
+    }
   });
 
   watch(['./src/**/*', './public/**/*'], batch(function(events, done) {
