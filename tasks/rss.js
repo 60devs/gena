@@ -65,8 +65,8 @@ gulp.task('rss', function() {
     '        <item>',
     '          <title>' + entities.encode(fm.title) + '</title>',
     '          <pubDate>' + new Date(fm.date).toUTCString() + '</pubDate>',
-    '          <link>' + entities.encode(site.url + '/' + analytics(fm.url, fm)) + '</link>',
-    '          <guid isPermaLink="true">' + entities.encode(site.url + '/' + analytics(fm.url, fm)) + '</guid>',
+    '          <link>' + entities.encode(site.url + analytics(fm.url, fm)) + '</link>',
+    '          <guid isPermaLink="true">' + entities.encode(site.url + analytics(fm.url, fm)) + '</guid>',
           ];
           if (fm.categories) {
             fm.categories.split(' ').forEach(function(c) {

@@ -6,8 +6,12 @@ var path = require('path');
 var site = {
   pages: [],
   posts: [],
+  authors: [],
   pagesMap: {},
-  postsMap: {}
+  postsMap: {},
+  authorsMap: {},
+  authors_order: [],
+  pages_order: []
 };
 
 global.site = site;
@@ -23,9 +27,9 @@ function pureName(name) {
 site.pureName = pureName;
 
 function buildPostMetaData(name, fm) {
-  fm.url = fm.url + '.html';
+  fm.url += '.html';
   fm.title = titleCaps(fm.title);
-  fm.full_url = site.url + '/' + fm.url;
+  fm.full_url = site.url + fm.url;
   return fm;
 }
 

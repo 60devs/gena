@@ -33,6 +33,7 @@ var PAGES_DIR = './src/pages/*';
 var PARTIALS_DIR = './src/partials/*';
 var POSTS_DIR = './src/posts/*';
 var HELPERS_DIR = './src/helpers/*';
+var AUTHORS_DIR = './src/authors/*';
 
 // HandlebarsIntl.registerWith(Handlebars);
 HandlebarsStatic.instance(Handlebars);
@@ -47,6 +48,14 @@ site.highlightjs_root = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4
 var fUpper = site.fUpper;
 var buildPostMetaData = site.buildPostMetaData;
 var pureName = site.pureName;
+
+function isPublished(file) {
+  if (file.fm.publish === false) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 gulp.task('index-content', function() {
   var postsIndex = gulp.src(POSTS_DIR)
@@ -65,9 +74,10 @@ gulp.task('index-content', function() {
           var name = file.path.replace(file.base, '');
           name = pureName(name);
           if (file.fm.publish !== false) {
-            file.fm.url = name.replace(/\d{4}-\d{2}-\d{2}-/g, '');
-            site.posts.push(file.fm);
-            site.postsMap[name] = buildPostMetaData(name, file.fm);
+            file.fm.url = '/' + name.replace(/\d{4}-\d{2}-\d{2}-/g, '');
+            var post = buildPostMetaData(name, file.fm);
+            site.posts.push(post);
+            site.postsMap[name] = post;
           }
 
           return stream;
@@ -95,9 +105,9 @@ gulp.task('index-content', function() {
       var page = {
         name: name,
         title: site.titleCaps(name),
-        url: name + '.html',
-        full_url: site.url + '/' + (name.url ? name.url : ''),
+        url:  '/' + name + '.html'
       };
+      page.full_url = site.url + page.url;
 
       page.mainNav = site.pages_order.indexOf(name) !== -1;
       if (name == 'index') {
@@ -109,16 +119,42 @@ gulp.task('index-content', function() {
       return stream;
     }));
 
-  return merge(postsIndex, pagesIndex);
-});
+  var authorsIndex = gulp.src(AUTHORS_DIR)
+    .pipe(plumber())
+    .pipe(sort({
+      comparator: function(file1, file2) {
+        var name1 = file1.path.replace(file1.base, '');
+        name1 = pureName(name1);
 
-function isPublished(file) {
-  if (file.fm.publish === false) {
-    return true;
-  } else {
-    return false;
-  }
-}
+        var name2 = file2.path.replace(file2.base, '');
+        name2 = pureName(name2);
+
+        var index1 = site.authors_order.indexOf(name1);
+        var index2 = site.authors_order.indexOf(name2);
+
+        return index1 - index2;
+      },
+    }))
+    .pipe(
+      fm({
+        property: 'fm',
+        remove: false,
+      })
+    )
+    .pipe(foreach(function(stream, file) {
+      var name = file.path.replace(file.base, '');
+      name = pureName(name);
+      var fm = file.fm;
+      fm.title = site.titleCaps(name.replace('.', ' '));
+      fm.url = '/authors/' + name + '.html';
+      fm.full_url = site.url + fm.url;
+      site.authors.push(fm);
+      site.authorsMap[name] = fm;
+      return stream;
+    }));
+
+  return merge(postsIndex, pagesIndex, authorsIndex);
+});
 
 gulp.task('posts', function() {
   return gulp.src(POSTS_DIR)
@@ -143,6 +179,9 @@ gulp.task('posts', function() {
       if (!context) {
         return gulp.src([]);
       }
+      var author = site.authorsMap[context.authorId];
+      context.author = author ? author.name : context.author;
+      context.authorLink = author ? author.url : context.authorLink;
 
       return gulp.src('src/layouts/' + (context.layout || 'post') + '.hbs')
             .pipe(HandlebarsStatic({
@@ -189,6 +228,60 @@ gulp.task('pages', function() {
     .pipe(gulp.dest('./dist'));
 });
 
+gulp.task('authors', function() {
+  return gulp.src(AUTHORS_DIR)
+    .pipe(plumber())
+    .pipe(fm({
+      property: 'fm',
+      remove: false,
+    }))
+    .pipe(gulpIgnore.exclude(isPublished))
+    .pipe(
+      fm({
+        remove: true,
+      })
+    )
+    .pipe(foreach(function(stream, file) {
+      var name = file.path.replace(file.base, '');
+      name = pureName(name);
+      var context = site.authorsMap[name];
+      if (!context) {
+        return gulp.src([]);
+      }
+      return stream
+        .pipe(HandlebarsStatic({
+          page: context,
+          site: site
+        }, {
+          helpers: gulp.src([HELPERS_DIR, 'node_modules/gena/handlebars/helpers/*.js']),
+          partials: gulp.src([PARTIALS_DIR, LAYOUTS_DIR]),
+        }));
+    }))
+    .pipe(foreach(function(stream, file) {
+      var name = file.path.replace(file.base, '');
+      name = pureName(name);
+      var context = site.authorsMap[name];
+      if (!context) {
+        return gulp.src([]);
+      }
+      return gulp.src('src/layouts/' + (context.layout || 'post') + '.hbs')
+        .pipe(HandlebarsStatic({
+          page: context,
+          site: site,
+          content: file._contents.toString('utf-8'),
+        }, {
+          helpers: gulp.src([HELPERS_DIR, 'node_modules/gena/handlebars/helpers/*.js']),
+          partials: gulp.src([PARTIALS_DIR, LAYOUTS_DIR]),
+        }))
+        .pipe(concat(name));
+    }))
+    .pipe(rename(function(path) {
+      path.extname += '.html';
+    }))
+    .pipe(htmlmin({collapseWhitespace: true}))
+    .pipe(gulp.dest('dist/authors'));
+});
+
 gulp.task('handlebars', function(callback) {
-  runSequence('index-content', 'posts', 'pages', callback);
+  runSequence('index-content', 'posts', 'authors', 'pages', callback);
 });
